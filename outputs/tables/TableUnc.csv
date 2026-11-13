@@ -1,0 +1,11 @@
+﻿Scenario,09:00,12:00,15:00,17:30,Max. shift (pp)
+Reference heights,15.1,3.9,5.9,19.5,–
+"Random, independent (range of 30)",12.8 to 16.6,2.6 to 4.9,4.6 to 7.8,13.8 to 21.1,5.7
+"Random, source polygon (range of 30)",11.2 to 18.3,3.4 to 4.8,4.9 to 8.2,14.4 to 21.0,5.1
+"Random, 250 m block (range of 30)",11.2 to 17.2,2.2 to 4.9,4.2 to 9.1,13.9 to 19.9,5.6
+"Random, height dependent (range of 30)",12.7 to 17.6,2.7 to 4.4,4.3 to 7.6,13.5 to 20.9,6.0
+"Bias, uniform factor 0.61",10.8,1.0,2.7,15.5,4.3
+"Bias, class-specific factors",9.1,0.6,2.3,14.4,6.0
+"Bias, storeys of 2.8 m (factor 0.57)",9.8,1.0,2.6,15.0,5.3
+"Bias, storeys of 3.3 m (factor 0.67)",11.5,1.6,3.0,16.5,3.5
+"Bias, storeys of 3.5 m (factor 0.71)",12.3,2.1,3.5,17.0,2.7

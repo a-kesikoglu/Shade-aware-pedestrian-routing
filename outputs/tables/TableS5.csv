@@ -1,0 +1,4 @@
+﻿Demand model,Top 5% overlap (J),Busiest 5% share of trip distance (%),TB 5% (%),Reference selection (%),Flow 5% (%),Random 5% (%),B10 09:00,B10 12:00,B10 15:00,B10 17:30
+Uniform nodes,0.54,29,23.0,20.9,21.8,3.5,10.2,1.6,4.2,14.2
+Points of interest,0.44,38,29.8,25.0,27.3,3.5,13.2,2.6,5.2,16.6
+Floor area and points of interest,0.73,35,28.7,28.1,26.5,3.5,15.9,4.2,7.2,20.0

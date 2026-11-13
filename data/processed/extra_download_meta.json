@@ -1,0 +1,8 @@
+{
+ "ext_network_edges": 9250,
+ "n_pois": 1104,
+ "dem_items": [
+  "Copernicus_DSM_COG_10_N38_00_E035_00_DEM"
+ ],
+ "ne_countries": 32
+}

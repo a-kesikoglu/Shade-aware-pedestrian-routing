@@ -1,0 +1,13 @@
+﻿Period,Street class,Length share (%),Both facades (%),Centreline s,Mean of sides s,Shadier side s,Sides differ > 0.5 (%)
+09:00,Arterial,23,13,0.47,0.38,0.05,67
+09:00,Local,74,32,0.41,0.33,0.07,53
+09:00,Pedestrian,3,9,0.42,0.32,0.13,36
+12:00,Arterial,23,13,0.93,0.63,0.29,66
+12:00,Local,74,32,0.79,0.58,0.26,63
+12:00,Pedestrian,3,9,0.74,0.51,0.28,39
+15:00,Arterial,23,13,0.68,0.52,0.12,80
+15:00,Local,74,32,0.61,0.49,0.24,48
+15:00,Pedestrian,3,9,0.50,0.44,0.10,75
+17:30,Arterial,23,13,0.27,0.26,0.04,46
+17:30,Local,74,32,0.23,0.23,0.04,37
+17:30,Pedestrian,3,9,0.28,0.20,0.07,23
