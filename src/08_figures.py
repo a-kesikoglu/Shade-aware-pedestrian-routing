@@ -575,8 +575,8 @@ def fig9():
               interpolation="nearest")
     mapdecor(ax, e[0], e[1], e[2], e[3], bar=200)
     panel(ax, "a")
-    ax.text(1.0, 1.02, f"{pd.to_datetime(sc['datetime']).day} {pd.to_datetime(sc['datetime']).strftime('%b %Y')}, "
-            f"α = {sc['elev']:.0f}°", transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5)
+    ax.text(1.0, 1.02, f"{pd.to_datetime(sc['datetime']).day} {pd.to_datetime(sc['datetime']).strftime('%b %Y')} ("
+            f"α = {sc['elev']:.0f}°)", transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5)
     ax = fig.add_subplot(gs[0, 1])
     d = vt[vt.stratum == "all streets"]
     hv = ["3D-GloBFP", "class correction", "uniform correction", "constant median", "no buildings"]
