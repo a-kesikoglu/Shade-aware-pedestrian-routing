@@ -1,0 +1,24 @@
+﻿osmid,name,way_highway,reason,segments,length_m,lon,lat
+155213922,Büyükşehir Alt Geçidi,trunk,segment on vehicle tunnel way,4.0,99.9,35.49796,38.724729
+155213922,Büyükşehir Alt Geçidi,trunk,sunken ramp within 30 m of the remaining network,14.0,345.1,35.498199,38.724976
+155213924,Büyükşehir Alt Geçidi,trunk,segment on vehicle tunnel way,4.0,97.7,35.498095,38.72459
+155213924,Büyükşehir Alt Geçidi,trunk,sunken ramp within 30 m of the remaining network,35.0,860.4,35.498284,38.724601
+363875918,Gültepe Alt Geçidi,primary_link,segment on vehicle tunnel way,3.0,74.7,35.500843,38.719052
+363875918,Gültepe Alt Geçidi,primary_link,sunken ramp within 30 m of the remaining network,17.0,419.1,35.500535,38.719672
+787957089,Melikgazi Alt Geçidi,primary,segment on vehicle tunnel way,3.0,72.5,35.499743,38.721566
+787957089,Melikgazi Alt Geçidi,primary,sunken ramp within 30 m of the remaining network,8.0,194.0,35.500022,38.721043
+787957091,Melikgazi Alt Geçidi,primary,segment on vehicle tunnel way,3.0,73.2,35.499627,38.721579
+787957091,Melikgazi Alt Geçidi,primary,sunken ramp within 30 m of the remaining network,7.0,171.4,35.499931,38.720855
+787957093,Nuh Naci Yazgan Caddesi,primary_link,segment on vehicle tunnel way,5.0,122.4,35.499021,38.722716
+787957093,Nuh Naci Yazgan Caddesi,primary_link,sunken ramp within 30 m of the remaining network,26.0,633.3,35.498962,38.723169
+155214029,Yoğuburç Alt Geçidi,primary,segment on vehicle tunnel way,4.0,97.5,35.492368,38.718515
+155214029,Yoğuburç Alt Geçidi,primary,sunken ramp within 30 m of the remaining network,15.0,365.6,35.492699,38.718187
+155214030,Yoğuburç Alt Geçidi,primary,segment on vehicle tunnel way,4.0,96.9,35.492262,38.7184
+155214030,Yoğuburç Alt Geçidi,primary,sunken ramp within 30 m of the remaining network,16.0,387.5,35.492509,38.718202
+788112299,,trunk_link,segment on vehicle tunnel way,3.0,71.4,35.497408,38.726629
+788112299,,trunk_link,sunken ramp within 30 m of the remaining network,9.0,214.3,35.497525,38.726055
+855365384,,primary,segment on vehicle tunnel way,5.0,122.9,35.500725,38.714913
+855365384,,primary,sunken ramp within 30 m of the remaining network,16.0,392.9,35.501629,38.714702
+894895657,,primary_link,segment on vehicle tunnel way,4.0,97.5,35.500822,38.716315
+894895657,,primary_link,sunken ramp within 30 m of the remaining network,7.0,170.6,35.500882,38.71682
+,,,disconnected from the largest component after removal,,467.1,,

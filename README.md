@@ -29,6 +29,8 @@ src/                         analysis pipeline (run from src/)
   26_rev_lst.py              Landsat scene statistics and single-scene run
   27_rev_search_tests.py     deterministic edge-case tests of the Pareto search (ties, budget and detour limits, knee)
   28_rev_od_overlap.py       overlap of evaluation and flow pairs, occupancy of the block bootstrap cells
+  29_rev_removed_segments.py removed underpass length by OSM way, location and reason
+                             (outputs/tables/rev_removed_segments.csv)
   07_summary.py, 09_tables.py, 08_figures.py   statistics, tables and figures
   network.py, shade.py, routing.py, impedance.py, sampling.py, mcworker.py   shared modules
 data/raw/                    clipped inputs used in the article (OSM snapshot of 3-4 November 2026 as GraphML and

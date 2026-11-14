@@ -1,0 +1,15 @@
+{
+ "full_km": 223.63486818616104,
+ "final_km": 217.98694985877523,
+ "removed_km": 5.64791832738581,
+ "vehicle_km": 5.180799589488822,
+ "disconnected_km": 0.4671187378969881,
+ "n_ways": 11,
+ "by_name_km": {
+  "Büyükşehir Alt Geçidi": 1.403,
+  "Gültepe Alt Geçidi": 0.494,
+  "Melikgazi Alt Geçidi": 0.511,
+  "Nuh Naci Yazgan Caddesi": 0.756,
+  "Yoğuburç Alt Geçidi": 0.947
+ }
+}

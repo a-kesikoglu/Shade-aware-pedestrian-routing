@@ -34,7 +34,7 @@ def add(group, name, red, jac, ident):
     r = {"Group": group, "Variant": name}
     for t in PERIODS:
         r[t] = f"{red[t]:.1f}"
-    r["J"] = "–" if jac is None else f"{jac:.2f}"
+    r["J"] = "–" if jac is None else f"{jac:.3f}"
     r["Identical (%)"] = "–" if ident is None else f"{100 * ident:.0f}"
     rows.append(r)
 
