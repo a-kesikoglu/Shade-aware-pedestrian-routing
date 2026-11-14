@@ -73,16 +73,25 @@ dm = RV["rev_routing"]["dsun_min"]
 add("Weights", "Direct minimisation of Dsun (1, 0, 0), β = 0", {t: dm[t]["dDsun_min_med"] for t in PERIODS},
     np.mean([dm[t]["J_B10_min_med"] for t in PERIODS]), np.mean([dm[t]["B10_equals_min_share"] for t in PERIODS]))
 cn = RV["rev_canopy"]["network"]
-add("Canopy", "Ray test only under crowns", {t: cn[t]["B10_dDsun_med"] for t in PERIODS}, None,
+add("Canopy", "Ray test only under crowns", {t: cn[t]["B10_dDsun_med"] for t in PERIODS},
+    np.mean([cn[t]["B10_jaccard_med"] for t in PERIODS]),
     np.mean([cn[t]["B10_same_share"] for t in PERIODS]))
 ls = RV["rev_lst"]["single_scene"]
-add("Surface temperature", f"Single scene of {ls['date'][8:10].lstrip('0')} July 2025", {t: ls[t]["B10_dDsun_med"] for t in PERIODS}, None,
+add("Surface temperature", f"Single scene of {ls['date'][8:10].lstrip('0')} July 2025", {t: ls[t]["B10_dDsun_med"] for t in PERIODS},
+    np.mean([ls[t]["B10_jaccard_med"] for t in PERIODS]),
     np.mean([ls[t]["B10_same_share"] for t in PERIODS]))
 _go = ["Reference", "Weights", "Penalty", "Canopy", "Ground", "Surface temperature", "Corridor", "Network"]
 rows = sorted(rows, key=lambda r: _go.index(r["Group"]))
 T4 = pd.DataFrame(rows)
 T4.columns = ["Group", "Variant"] + [f"ΔDsun {t}" for t in PERIODS] + ["J", "Identical (%)"]
 T4.to_csv(TAB / "Table4.csv", index=False, encoding="utf-8-sig")
+
+_SUP = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
+def _sci(p):
+    e = int(np.floor(np.log10(p))); return f"{p / 10 ** e:.1f} × 10{str(e).translate(_SUP)}"
+
 
 # ---------------------------------------------------------------- Table 5: interventions
 iv = pd.read_csv(TAB / "intervention_scenarios.csv")
@@ -123,7 +132,7 @@ T5.to_csv(TAB / "Table5.csv", index=False, encoding="utf-8-sig")
 # ---------------------------------------------------------------- paired tests (metres)
 pt = pd.read_csv(TAB / "rev_paired_tests.csv")
 TT = pd.DataFrame([{"Period": r.time, "Route": r.route, "n": f"{r.n_nonzero:.0f}", "W+": f"{r.W_plus:,.0f}",
-                    "z": f"{r.z:.1f}", "r": f"{r.r:.2f}", "Holm p": "< 0.001" if r.p_holm < 0.001 else f"{r.p_holm:.3f}",
+                    "z": f"{r.z:.1f}", "r": f"{r.r:.2f}", "Holm p": _sci(r.p_holm),
                     "Median difference (m)": neg(f"{r.diff_med_m:.0f} ({r.diff_p25_m:.0f} to {r.diff_p75_m:.0f})"),
                     "Mean difference (m)": f"{r.diff_mean_m:.0f}", "Median extra length (m)": f"{r.extra_len_med_m:.0f}"}
                    for r in pt.itertuples()])

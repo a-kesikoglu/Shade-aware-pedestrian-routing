@@ -96,7 +96,8 @@ for t in PERIODS:
                      "dDsun_B10": red(res[t][k]["B10"]["dsun"]), "dDsun_KP": red(res[t][k]["KP"]["dsun"]),
                      "B10_minus_min_m": res[t][k]["B10"]["dsun"] - ds,
                      "J_B10_min": jac(es, res[t][k]["B10"]["edges"]),
-                     "sp_dsun": sp["dsun"]})
+                     "sp_dsun": sp["dsun"], "b10_dsun": res[t][k]["B10"]["dsun"],
+                     "same_edges_min": set(es) == set(res[t][k]["B10"]["edges"])})
     d = pd.DataFrame(rows)
     pot = d.sp_dsun - d.dsun_min
     ach = d.sp_dsun - (d.sp_dsun * (1 - d.dDsun_B10 / 100))
@@ -110,7 +111,11 @@ for t in PERIODS:
                "B10_minus_min_m_med": float(d.B10_minus_min_m.median()),
                "B10_minus_min_m_p90": float(d.B10_minus_min_m.quantile(.9)),
                "J_B10_min_med": float(d.J_B10_min.median()),
-               "pairs_with_potential_share": float(m.mean())}
+               "pairs_with_potential_share": float(m.mean()),
+               "B10_same_edges_as_min_share": float(d.same_edges_min.mean()),
+               "violations_min_gt_B10": int((d.dsun_min > d.b10_dsun + 1e-6).sum()),
+               "violations_min_gt_SP": int((d.dsun_min > d.sp_dsun + 1e-6).sum()),
+               "ratio_definition": "(sum D_SP - sum D_B10) / (sum D_SP - sum D_min) over pairs with D_SP > D_min, same SP"}
     print(t, dmin[t], flush=True)
 out["dsun_min"] = dmin
 pickle.dump(dmin_routes, open(PROC / "rev_dsun_min_routes.pkl", "wb"))

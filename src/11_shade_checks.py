@@ -418,7 +418,7 @@ def part6():
             dsp, db = (L[sp] * s[sp]).sum(), (L[bb] * s[bb]).sum()
             r0 = g["base"][t][k]
             rows.append((t, k, L0 / l0 - 1, float((~inside[sp]).any()), float((~inside[bb]).any()),
-                         100 * (1 - db / dsp) if dsp > 0 else 0, 100 * (1 - r0["B10"]["dsun"] / r0["SP"]["dsun"])))
+                         100 * (1 - db / dsp) if dsp > 0 else 0, (100 * (1 - r0["B10"]["dsun"] / r0["SP"]["dsun"]) if r0["SP"]["dsun"] > 0 else 0.0)))
     df = pd.DataFrame(rows, columns=["time", "od", "dSPlen", "sp_out", "b10_out", "dDsun_ext", "dDsun_base"])
     return {"n_matched": int(df.od.nunique()), "n_segments_ext": int(n),
             "sp_shorter_share": float((df[df.time == "09:00"].dSPlen < -1e-6).mean()),

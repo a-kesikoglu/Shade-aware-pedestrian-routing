@@ -57,16 +57,17 @@ for t in PERIODS:
     s = edge_sunlit(tr, idx, seg.covered.values)
     s0 = seg[f"s_{t.replace(':', '')}"].values
     c2 = thermal_cost(L, s, seg.ndvi_n.values, seg.lst_n.values, WEIGHTS["balanced"])
-    red, same = [], []
+    red, same, jac = [], [], []
     for k, (o, d, _) in enumerate(OD):
         sols, L0 = pareto_paths(net, o, d, L, c2, detour=1.5)
         b10 = sols[budget(sols, L0, 0.10)][2]; sp = sols[0][2]
         ds, db = (L[sp] * s[sp]).sum(), (L[b10] * s[b10]).sum()
         red.append(100 * (ds - db) / ds if ds > 0 else 0)
         same.append(set(b10) == set(base[t][k]["B10"]["edges"]))
+        A, B = set(b10), set(base[t][k]["B10"]["edges"]); jac.append(float(L[list(A & B)].sum() / L[list(A | B)].sum()))
     out["network"][t] = {"net_sunlit_ref": float((L * s0).sum() / L.sum()), "net_sunlit_ray": float((L * s).sum() / L.sum()),
                          "len_changed_gt005": float(L[np.abs(s - s0) > 0.05].sum() / L.sum()),
-                         "B10_dDsun_med": float(np.median(red)), "B10_same_share": float(np.mean(same))}
+                         "B10_dDsun_med": float(np.median(red)), "B10_same_share": float(np.mean(same)), "B10_jaccard_med": float(np.median(jac)), "B10_jaccard_mean": float(np.mean(jac))}
     print(t, out["network"][t], flush=True)
 json.dump(out, open(PROC / "rev_canopy.json", "w"), indent=1)
 for g in out["geometry"]:

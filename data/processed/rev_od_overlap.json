@@ -1,0 +1,18 @@
+{
+ "n_eval": 500,
+ "n_flow": 5000,
+ "eval_in_flow_same_direction": 0,
+ "eval_in_flow_either_direction": 0,
+ "eval_duplicates": 0,
+ "flow_duplicates": 0,
+ "eval_origins_unique": 467,
+ "eval_destinations_unique": 471,
+ "origin_cells": {
+  "non_empty": 36,
+  "sum": 500,
+  "min": 1,
+  "max": 52,
+  "median": 9.0,
+  "outside_6x6": 0
+ }
+}

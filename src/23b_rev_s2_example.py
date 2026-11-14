@@ -32,7 +32,7 @@ with rasterio.open(PROC / "bld_h_1m.tif") as s:
 ch = rasterio.open(PROC / "canopy_h_1m.tif").read(1)
 ts = pd.Timestamp(sc["datetime"])
 sp = pvlib.solarposition.get_solarposition(pd.DatetimeIndex([ts]), CENTER_LAT, CENTER_LON)
-tr = cast(bh, ch, float(sp.azimuth.iloc[0]), float(sp.apparent_elevation.iloc[0]))
+tr = cast(bh, ch, float(sp.azimuth.iloc[0]) - GRID_CONVERGENCE, float(sp.apparent_elevation.iloc[0]))
 nr, nc = int((B[3] - B[1]) / 10), int((B[2] - B[0]) / 10)
 shade10 = np.zeros((nr, nc), "float32")
 reproject((1 - tr).astype("float32"), shade10, src_transform=TF1, src_crs=CRS_UTM,

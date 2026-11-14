@@ -35,3 +35,10 @@ WEIGHTS = {"balanced": (1/3, 1/3, 1/3),
            "lst": (0.2, 0.2, 0.6),
            "shade_only": (1.0, 0.0, 0.0)}
 SEED = 20250721
+# Meridian convergence at the study-area centre (UTM 36N), about 1.56 deg.
+# Solar azimuths from pvlib refer to true north; the rasters are in UTM grid coordinates, so azimuths are
+# converted with az_grid = az_true - GRID_CONVERGENCE before casting (true north has grid bearing -GRID_CONVERGENCE).
+def _grid_convergence():
+    from pyproj import Proj
+    return float(Proj(CRS_UTM).get_factors(CENTER_LON, CENTER_LAT).meridian_convergence)
+GRID_CONVERGENCE = _grid_convergence()

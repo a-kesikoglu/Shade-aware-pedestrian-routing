@@ -30,7 +30,7 @@ C_PER = dict(zip(PERIODS, ["#2a6fc4", "#c98a00", "#e0602a", "#7b3fa0"]))
 M_PER = dict(zip(PERIODS, ["o", "s", "^", "D"]))
 C_STR = {"TB": "#2a6fc4", "gain": "#7b3fa0", "flow": "#e0602a", "sun": "#1b9a6c", "random100": "#8c8b86"}
 LBL_STR = {"TB": "Thermal betweenness", "gain": "Direct gain ranking", "flow": "Pedestrian flow",
-           "sun": "Daily sunlit fraction", "random100": "Random (mean, 95% range)"}
+           "sun": "Daily sunlit fraction", "random100": "Random (mean, 2.5th–97.5th percentiles)"}
 
 seg = load_segments()
 L = seg.length.values
@@ -114,11 +114,11 @@ def fig1():
     box(0, 27, 22, 20, "1 Open inputs", "OSM network, footprints\n3D-GloBFP heights\ncanopy height map\nSentinel-2, Landsat", "#f4f3ef")
     box(26, 27, 22, 20, "2 Surface and shade", "1 m building and\ncanopy surface\nhourly shadow casting\n07:00 to 19:00", "#eef3fb")
     box(52, 27, 22, 20, "3 Routing", "edge sunlit fraction\ncomposite cost\nPareto set, ε ≤ 50%\n500 evaluation pairs", "#eef3fb")
-    box(78, 27, 22, 20, "4 Prioritisation", "flow of 5000 pairs\nthermal betweenness\ntreated length 1–10%\nscenario comparison", "#fdf0ea")
+    box(78, 27, 22, 20, "4 Prioritisation", "ranking: 5000 flow pairs\nthermal betweenness\ntreated length 1–10%\nevaluation: 500 pairs", "#fdf0ea")
     for x in (22.7, 48.7, 74.7):
         arr(x, 37, x + 2.6, 37)
-    box(13, 1, 34, 18, "Verification and validation", "analytic shadow test, exhaustive\npath enumeration, heights against\nOSM tags, network extent test", "#f4f3ef")
-    box(53, 1, 34, 18, "Uncertainty and sensitivity", "height Monte Carlo (three error\nmodels), weights, penalty, canopy,\nterrain, corridor, demand", "#f4f3ef")
+    box(13, 1, 34, 18, "Verification and validation", "analytic shadow test, path\nenumeration, Sentinel-2 dark-pixel\ncomparison, heights vs OSM tags", "#f4f3ef")
+    box(53, 1, 34, 18, "Uncertainty and sensitivity", "height Monte Carlo (four error\nmodels) and bias scenarios, weights,\ncanopy, terrain, corridor, demand", "#f4f3ef")
     for x in (30, 37):
         arr(x, 19.6, x, 26.3, "--")
     for x0, x1 in ((63, 63), (70, 70), (80, 89)):
@@ -352,9 +352,9 @@ def fig6():
     full, sv = {}, {}
     for t in PERIODS:
         S_ = seg[f"s_{t.replace(':', '')}"].values
-        full[t] = np.array([100 * (1 - r["B10"]["dsun"] / r["SP"]["dsun"]) for r in res[t]])
+        full[t] = np.array([100 * (1 - r["B10"]["dsun"] / r["SP"]["dsun"]) if r["SP"]["dsun"] > 0 else 0.0 for r in res[t]])
         sv[t] = np.array([100 * (1 - (L[sat[k]["B10"]] * S_[sat[k]["B10"]]).sum() / r["SP"]["dsun"])
-                          for k, r in enumerate(res[t])])
+                          if r["SP"]["dsun"] > 0 else 0.0 for k, r in enumerate(res[t])])
     fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.7), gridspec_kw={"width_ratios": [1.1, 1, 1]})
     ax = axs[0]
     bp = ax.boxplot([full[t] - sv[t] for t in PERIODS], positions=range(4), widths=0.6, patch_artist=True,
@@ -574,6 +574,9 @@ def fig9():
     ax.imshow(sh, extent=[e[0], e[2], e[1], e[3]], cmap=mpl.colors.ListedColormap(["#ffd400"]), alpha=0.35,
               interpolation="nearest")
     mapdecor(ax, e[0], e[1], e[2], e[3], bar=200)
+    from matplotlib.patches import Patch
+    ax.legend(handles=[Patch(fc="#ffd400", alpha=0.6, ec="none", label="Modelled shadow ≥ 50%")],
+              frameon=False, fontsize=6.5, loc="upper left", bbox_to_anchor=(-0.02, -0.01), handlelength=1.2, borderpad=0.2)
     panel(ax, "a")
     ax.text(1.0, 1.02, f"{pd.to_datetime(sc['datetime']).day} {pd.to_datetime(sc['datetime']).strftime('%b %Y')} ("
             f"α = {sc['elev']:.0f}°)", transform=ax.transAxes, ha="right", va="bottom", fontsize=7.5)

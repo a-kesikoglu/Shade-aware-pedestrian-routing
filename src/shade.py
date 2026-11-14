@@ -8,7 +8,9 @@ from config import *
 def sun_positions(times_local):
     idx = pd.DatetimeIndex([pd.Timestamp(f"{DAY} {t}", tz=TZ) for t in times_local])
     sp = pvlib.solarposition.get_solarposition(idx, CENTER_LAT, CENTER_LON, method="nrel_numpy")
-    return pd.DataFrame({"time": times_local, "azimuth": sp["azimuth"].values,
+    # "azimuth" is the grid azimuth on the UTM raster; "azimuth_true" refers to true north
+    return pd.DataFrame({"time": times_local, "azimuth": sp["azimuth"].values - GRID_CONVERGENCE,
+                         "azimuth_true": sp["azimuth"].values,
                          "elevation": sp["apparent_elevation"].values})
 
 

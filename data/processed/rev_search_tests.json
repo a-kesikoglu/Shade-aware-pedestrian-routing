@@ -1,0 +1,33 @@
+{
+ "identical_vectors": {
+  "n_solutions": 2,
+  "deterministic": true,
+  "pass": true
+ },
+ "zero_cost": {
+  "n_solutions": 1,
+  "pass": true
+ },
+ "budget_boundary": {
+  "selected_length": 110.0,
+  "pass": true
+ },
+ "detour_cap": {
+  "lengths": [
+   100.0,
+   150.0
+  ],
+  "pass": true
+ },
+ "collinear": {
+  "n_solutions": 3,
+  "knee": 0,
+  "pass": true
+ },
+ "knee_shape": {
+  "concave_knee": 0,
+  "convex_knee": 1,
+  "pass": true
+ },
+ "all_pass": true
+}

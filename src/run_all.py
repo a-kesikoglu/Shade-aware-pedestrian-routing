@@ -19,7 +19,7 @@ STEPS = [
     ("12", "src/12_height_checks.py"), ("13", "src/13_priority_checks.py"),
     ("20", "src/20_rev_routing.py"), ("21", "src/21_rev_heights.py mc"), ("22", "src/22_rev_canopy.py"),
     ("23", "src/23_rev_s2_validation.py"), ("23b", "src/23b_rev_s2_example.py"), ("24", "src/24_rev_priority.py"),
-    ("25", "src/25_rev_weights.py"), ("26", "src/26_rev_lst.py"),
+    ("25", "src/25_rev_weights.py"), ("26", "src/26_rev_lst.py"), ("27", "src/27_rev_search_tests.py"), ("28", "src/28_rev_od_overlap.py"),
     ("07", "src/07_summary.py"), ("09", "src/09_tables.py"), ("08", "src/08_figures.py"),
 ]
 
@@ -33,5 +33,6 @@ for key, script in STEPS[keys.index(start):]:
                        encoding="utf-8", errors="replace")
     line = f"{time.strftime('%Y-%m-%d %H:%M:%S')}  {key:4s} {script:40s} exit {r.returncode}  {time.time() - t0:7.0f} s"
     print(line, flush=True); log.write(line + "\n"); log.flush()
+    (ROOT / "data" / "processed" / f"run_{key}.log").write_text(r.stdout[-200000:], encoding="utf-8")
     if r.returncode != 0:
         log.write(r.stderr[-4000:] + "\n"); print(r.stderr[-4000:]); sys.exit(r.returncode)

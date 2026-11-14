@@ -33,7 +33,7 @@ def job(w):
             sols, L0 = pareto_paths(net, o, d, L, c2, detour=1.5)
             b = sols[budget(sols, L0, 0.10)][2]
             sp = base[t][k]["SP"]; b0 = base[t][k]["B10"]["edges"]
-            red.append(100 * (sp["dsun"] - (L[b] * s[b]).sum()) / sp["dsun"])
+            red.append(100 * (sp["dsun"] - (L[b] * s[b]).sum()) / sp["dsun"] if sp["dsun"] > 0 else 0.0)
             A, B = set(b), set(b0)
             jac.append(L[list(A & B)].sum() / L[list(A | B)].sum()); same.append(A == B)
         rows.append({"w1": w[0], "w2": w[1], "w3": w[2], "time": t, "dDsun_med": float(np.median(red)),

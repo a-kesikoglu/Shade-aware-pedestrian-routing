@@ -1,4 +1,4 @@
-﻿"""Exact bi-objective label-setting search (Martins, 1984) with lower-bound pruning
+"""Exact bi-objective label-setting search (Martins, 1984) with lower-bound pruning
 and a maximum-detour constraint, plus route evaluation utilities."""
 import heapq
 import numpy as np
@@ -92,8 +92,9 @@ def pareto_paths(net, o, d, c1, c2, detour=1.5, max_labels=400000):
 
 
 def knee(sols):
-    """Solution with maximum perpendicular distance to the line joining the extremes
-    in min-max normalised objective space."""
+    """Solution with the largest perpendicular distance to the chord joining the two extreme
+    solutions in min-max normalised objective space, counted only on the side of the ideal point
+    (the origin). If no solution lies on that side, the shortest path (index 0) is returned."""
     if len(sols) <= 2:
         return 0
     f = np.array([[s[0], s[1]] for s in sols])
@@ -101,8 +102,10 @@ def knee(sols):
     g = (f - lo) / np.where(hi > lo, hi - lo, 1)
     a, b = g[0], g[-1]
     dvec = b - a
-    dist = np.abs(dvec[0] * (a[1] - g[:, 1]) - dvec[1] * (a[0] - g[:, 0])) / np.linalg.norm(dvec)
-    return int(np.argmax(dist))
+    # signed distance, positive towards the ideal point (g0 + g1 < 1 for the chord from (0, 1) to (1, 0))
+    dist = (dvec[0] * (a[1] - g[:, 1]) - dvec[1] * (a[0] - g[:, 0])) / np.linalg.norm(dvec)
+    k = int(np.argmax(dist))
+    return k if dist[k] > 1e-12 else 0
 
 
 def budget(sols, L0, eps):

@@ -129,7 +129,10 @@ def auc(score, label):
     return float((r[label].sum() - n1 * (n1 + 1) / 2) / (n1 * n0)) if n1 and n0 else np.nan
 
 
-rows, meta = [], []
+rows, meta, paired = [], [], []
+# 250 m blocks (25 x 25 pixels of 10 m) for a spatial block bootstrap of paired AUC differences
+blk_id = (np.arange(nrows)[:, None] // 25) * 1000 + (np.arange(ncols)[None, :] // 25)
+rng = np.random.default_rng(SEED)
 for it, elev in scenes:
     bands = {}
     for b in ["B02", "B03", "B04", "B08"]:
@@ -140,13 +143,18 @@ for it, elev in scenes:
     bright = np.mean([bands[b] for b in bands], 0)
     ts = pd.Timestamp(it.datetime)
     sp = pvlib.solarposition.get_solarposition(pd.DatetimeIndex([ts]), CENTER_LAT, CENTER_LON)
-    az, el = float(sp.azimuth.iloc[0]), float(sp.apparent_elevation.iloc[0])
+    az, el = float(sp.azimuth.iloc[0]) - GRID_CONVERGENCE, float(sp.apparent_elevation.iloc[0])
     meta.append({"id": it.id, "datetime": it.datetime.isoformat(), "elev": el, "azimuth": az,
                  "baseline": it.properties.get("s2:processing_baseline")})
+    thr_all = float(otsu(bright[strata["all streets"]]))
+    meta[-1].update({"otsu_threshold": thr_all, "valid_px": {k: int(v.sum()) for k, v in strata.items()},
+                     "dark_share_all": float((bright[strata["all streets"]] < thr_all).mean())})
+    xs = {}
     for name, hv in VERS.items():
         bh = np.r_[0.0, hv].astype("float32")[bid]
         tr = cast(bh, canopy, az, el)
         shade10 = to10(1 - tr)
+        xs[name] = shade10[strata["all streets"]]
         for sname, m in strata.items():
             x = shade10[m]; y = bright[m]
             thr = otsu(bright[strata["all streets"]])
@@ -160,8 +168,25 @@ for it, elev in scenes:
                          "balanced_accuracy": float(0.5 * (tp / max(obs.sum(), 1) + tn / max((~obs).sum(), 1))),
                          "iou": float(tp / max((mod | obs).sum(), 1))})
         print(it.id, name, flush=True)
+    # paired AUC differences against 3D-GloBFP on the same pixels, with a 250 m block bootstrap
+    m = strata["all streets"]; obs = bright[m] < thr_all; bl = blk_id[m]
+    ub = np.unique(bl); members = [np.flatnonzero(bl == u) for u in ub]
+    for name in VERS:
+        if name == "3D-GloBFP":
+            continue
+        d0 = auc(xs[name], obs) - auc(xs["3D-GloBFP"], obs)
+        bs = []
+        for _ in range(500):
+            ii = np.concatenate([members[j] for j in rng.integers(0, len(ub), len(ub))])
+            bs.append(auc(xs[name][ii], obs[ii]) - auc(xs["3D-GloBFP"][ii], obs[ii]))
+        paired.append({"scene": it.datetime.strftime("%Y-%m-%d"), "elev": el, "heights": name, "d_auc": float(d0),
+                       "lo": float(np.nanpercentile(bs, 2.5)), "hi": float(np.nanpercentile(bs, 97.5)),
+                       "n_blocks": int(len(ub))})
 tab = pd.DataFrame(rows)
 tab.to_csv(TAB / "rev_s2_validation.csv", index=False)
-json.dump({"scenes": meta, "n_candidates": len(cands), "otsu_note": "threshold from all street pixels per scene"},
+pd.DataFrame(paired).to_csv(TAB / "rev_s2_paired_auc.csv", index=False)
+pd.DataFrame([{k: (v if not isinstance(v, dict) else None) for k, v in m_.items()} | m_["valid_px"] for m_ in meta]).drop(
+    columns=["valid_px"]).to_csv(TAB / "rev_s2_scene_manifest.csv", index=False)
+json.dump({"paired_auc": paired, "scenes": meta, "n_candidates": len(cands), "otsu_note": "threshold from all street pixels per scene"},
           open(PROC / "rev_s2_validation.json", "w"), indent=1)
 print(tab[tab.stratum == "all streets"].round(3).to_string())
